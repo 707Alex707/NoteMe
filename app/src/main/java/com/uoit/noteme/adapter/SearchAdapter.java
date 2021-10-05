@@ -12,10 +12,10 @@ class SearchViewHolder extends RecyclerView.ViewHolder{
     public SearchViewHolder(View itemView){
         super(itemView);
 
-        title = (TextView)itemView.findViewById(R.id.title);
-        subtitle = (TextView)itemView.findViewById(R.id.subtitle);
-        note = (TextView)itemView.findViewById(R.id.note);
-        color = (TextView)itemView.findViewById(R.id.color);
+        //title = (TextView)itemView.findViewById(R.id.title);
+        //subtitle = (TextView)itemView.findViewById(R.id.subtitle);
+        //note = (TextView)itemView.findViewById(R.id.note);
+        //color = (TextView)itemView.findViewById(R.id.color);
     }
 }
 
