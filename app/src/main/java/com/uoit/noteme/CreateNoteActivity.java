@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-//Test
 public class CreateNoteActivity extends AppCompatActivity {
 
     DatabaseHelper mDatabaseHelper;
@@ -20,6 +19,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_note);
         mDatabaseHelper = new DatabaseHelper(this);
+        this.findViewById(R.id.textYellow).getRootView().setBackgroundColor(Color.parseColor("#F4CA5E"));
 
         EditText title = findViewById(R.id.inputNoteTitle);
         EditText subtitle = findViewById(R.id.inputNoteSubTitle);
@@ -47,23 +47,23 @@ public class CreateNoteActivity extends AppCompatActivity {
         }
     }
 
-    public void setColorBlack(View view) {
-        this.noteColor = "black";
-        view.getRootView().setBackgroundColor(Color.parseColor("#000000"));
+    public void setColorRed(View view) {
+        this.noteColor = "red";
+        view.getRootView().setBackgroundColor(Color.parseColor("#FF6A6A"));
     }
 
     public void setColorYellow(View view) {
         this.noteColor = "yellow";
-        view.getRootView().setBackgroundColor(Color.parseColor("#FFFF00"));
+        view.getRootView().setBackgroundColor(Color.parseColor("#F4CA5E"));
     }
 
     public void setColorBlue(View view) {
         this.noteColor = "blue";
-        view.getRootView().setBackgroundColor(Color.parseColor("#0000FF"));
+        view.getRootView().setBackgroundColor(Color.parseColor("#6AA6FF"));
     }
 
     public void setColorGreen(View view) {
         this.noteColor = "green";
-        view.getRootView().setBackgroundColor(Color.parseColor("#008000"));
+        view.getRootView().setBackgroundColor(Color.parseColor("#76DC8F"));
     }
 }
