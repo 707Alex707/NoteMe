@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+//Test
 public class CreateNoteActivity extends AppCompatActivity {
 
     DatabaseHelper mDatabaseHelper;
