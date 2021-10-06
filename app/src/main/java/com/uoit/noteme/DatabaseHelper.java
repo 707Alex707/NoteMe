@@ -24,7 +24,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db){
-        String createTable = "CREATE TABLE " + TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " + COL2 + " TEXT, "  + COL3 + " TEXT, "  + COL4+ " TEXT)";
+        String createTable = "CREATE TABLE " + TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " + COL2 + " TEXT, "  + COL3 + " TEXT, "  + COL4+ " TEXT, " + COL5+ " TEXT)";
         db.execSQL(createTable);
     }
 
@@ -34,12 +34,13 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         onCreate(db);
     }
 
-    public Cursor fetch(SQLiteDatabase db) {
-        Cursor cursor = db.query(TABLE_NAME, new String[]{this.COL1, this.COL2, this.COL3}, null, null, null, null, null);
-        if (cursor != null) {
-            cursor.moveToFirst();
-        }
-        return cursor;
+    public Cursor fetch() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_NAME;
+        Cursor data = db.rawQuery(query, null);
+        //Cursor cursor = db.query(TABLE_NAME, new String[]{this.COL1, this.COL2, this.COL3}, null, null, null, null, null);
+
+        return data;
     }
 
     public boolean addData(String title, String subtitle, String note, String color){
