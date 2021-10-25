@@ -2,6 +2,7 @@ package com.uoit.noteme;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +18,7 @@ public class CreateNoteActivity extends AppCompatActivity {
     EditText title;
     EditText subtitle;
     EditText note;
+    private boolean titleEmptyWarned = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,5 +71,16 @@ public class CreateNoteActivity extends AppCompatActivity {
     public void setColorGreen(View view) {
         this.noteColor = "#76DC8F";
         view.getRootView().setBackgroundColor(Color.parseColor("#76DC8F"));
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!titleEmptyWarned){
+            titleEmptyWarned = true;
+            Toast.makeText(this,"A title must be entered to save a note. Press back again to discard note", Toast.LENGTH_LONG).show();
+            return;
+        }
+        Toast.makeText(this,"Note not saved", Toast.LENGTH_SHORT).show();
+        super.onBackPressed();
     }
 }
