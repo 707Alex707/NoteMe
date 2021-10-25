@@ -43,13 +43,23 @@ public class CreateNoteActivity extends AppCompatActivity {
         String subtitleText =  subtitle.getText().toString();
         String noteText =  note.getText().toString();
 
-        boolean insertData = mDatabaseHelper.addData(titleText, subtitleText, noteText, this.noteColor);
+        //Check note title length
+        EditText editText = findViewById(R.id.inputNoteTitle);
+        String inputNoteTitleText = editText.getText().toString();
+        if(inputNoteTitleText.length() == 0){
 
-        if (insertData) {
+            //Send toast warning that title is empty
+            if (!titleEmptyWarned){
+                titleEmptyWarned = true;
+                Toast.makeText(this,"A title must be entered to save a note. Press back again to discard note", Toast.LENGTH_LONG).show();
+                return;
+            } else {
+                Toast.makeText(this,"Note not saved", Toast.LENGTH_SHORT).show();
+            }
+        }else{
+            mDatabaseHelper.addData(titleText, subtitleText, noteText, this.noteColor);
             Toast.makeText(this,"Data Successfully Inserted!", Toast.LENGTH_SHORT).show();
             onBackPressed();
-        } else {
-            Toast.makeText(this,"Something went wrong", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -71,28 +81,5 @@ public class CreateNoteActivity extends AppCompatActivity {
     public void setColorGreen(View view) {
         this.noteColor = "#76DC8F";
         view.getRootView().setBackgroundColor(Color.parseColor("#76DC8F"));
-    }
-
-    @Override
-    public void onBackPressed() {
-
-        //Check note title length
-        EditText editText = findViewById(R.id.inputNoteTitle);
-        String inputNoteTitleText = editText.getText().toString();
-        if(inputNoteTitleText.length() == 0){
-
-            //Send toast warning that title is empty
-            if (!titleEmptyWarned){
-                titleEmptyWarned = true;
-                Toast.makeText(this,"A title must be entered to save a note. Press back again to discard note", Toast.LENGTH_LONG).show();
-                return;
-            } else {
-                Toast.makeText(this,"Note not saved", Toast.LENGTH_SHORT).show();
-                super.onBackPressed();
-            }
-        }
-
-        //Perform normal back operation
-        super.onBackPressed();
     }
 }
