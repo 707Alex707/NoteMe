@@ -14,7 +14,7 @@ import android.widget.Toast;
 public class CreateNoteActivity extends AppCompatActivity {
 
     DatabaseHelper mDatabaseHelper;
-    String noteColor;
+    String noteColor = "#F4CA5E";
     EditText title;
     EditText subtitle;
     EditText note;

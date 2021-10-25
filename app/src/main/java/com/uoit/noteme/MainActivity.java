@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
         setContentView(R.layout.activity_main);
 
         mDatabaseHelper = new DatabaseHelper(this);
-        retrieveData();
+        retrieveData("SELECT *");
 
         ImageView imageAddNoteMain = findViewById(R.id.imageAddNoteMain);
         imageAddNoteMain.setOnClickListener(v -> startActivityForResult(new Intent(
@@ -44,11 +44,11 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
     @Override
     public void onResume(){
         super.onResume();
-        retrieveData();
+        retrieveData("SELECT *");
     }
 
-    public void retrieveData(){
-        Cursor data = mDatabaseHelper.fetch();
+    public void retrieveData(String query){
+        Cursor data = mDatabaseHelper.fetch(query);
         ArrayList<ArrayList<String>> listData = new ArrayList<ArrayList<String>>();
 
         while(data.moveToNext()){
