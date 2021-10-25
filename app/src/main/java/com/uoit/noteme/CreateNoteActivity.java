@@ -75,12 +75,24 @@ public class CreateNoteActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (!titleEmptyWarned){
-            titleEmptyWarned = true;
-            Toast.makeText(this,"A title must be entered to save a note. Press back again to discard note", Toast.LENGTH_LONG).show();
-            return;
+
+        //Check note title length
+        EditText editText = findViewById(R.id.inputNoteTitle);
+        String inputNoteTitleText = editText.getText().toString();
+        if(inputNoteTitleText.length() == 0){
+
+            //Send toast warning that title is empty
+            if (!titleEmptyWarned){
+                titleEmptyWarned = true;
+                Toast.makeText(this,"A title must be entered to save a note. Press back again to discard note", Toast.LENGTH_LONG).show();
+                return;
+            } else {
+                Toast.makeText(this,"Note not saved", Toast.LENGTH_SHORT).show();
+                super.onBackPressed();
+            }
         }
-        Toast.makeText(this,"Note not saved", Toast.LENGTH_SHORT).show();
+
+        //Perform normal back operation
         super.onBackPressed();
     }
 }
