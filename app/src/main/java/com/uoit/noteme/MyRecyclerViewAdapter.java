@@ -28,19 +28,21 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     private ItemClickListener mClickListener;
 
     private final ClickListener listener;
+    private DatabaseHelper dbh;
 
     // data is passed into the constructor
-    MyRecyclerViewAdapter(Context context, ArrayList<ArrayList<String>> data, ClickListener listener) {
+    MyRecyclerViewAdapter(Context context, ArrayList<ArrayList<String>> data, ClickListener listener, DatabaseHelper mDatabaseHelper) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         this.listener = listener;
+        this.dbh = mDatabaseHelper;
     }
 
     // inflates the row layout from xml when needed
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.recyclerview_row, parent, false);
-        return new ViewHolder(view, listener);
+        return new ViewHolder(view, listener, getAdapter());
     }
 
     // binds the data to the TextView in each row
@@ -60,6 +62,9 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         return mData.size();
     }
 
+    public MyRecyclerViewAdapter getAdapter(){
+        return this;
+    }
 
 
 
@@ -72,8 +77,9 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
         private ImageView iconImageView;
         private WeakReference<ClickListener> listenerRef;
+        private MyRecyclerViewAdapter adapter;
 
-        ViewHolder(View itemView, ClickListener listener) {
+        ViewHolder(View itemView, ClickListener listener, MyRecyclerViewAdapter adapter) {
             super(itemView);
             title = itemView.findViewById(R.id.row_title);
             subtitle = itemView.findViewById(R.id.row_subtitle);
@@ -84,6 +90,8 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             listenerRef = new WeakReference<>(listener);
             iconImageView = (ImageView) itemView.findViewById(R.id.imageButton3);
             iconImageView.setOnClickListener(this);
+
+            this.adapter = adapter;
         }
 
         @Override
@@ -93,8 +101,15 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 //                Toast.makeText(view.getContext(), "ITEM PRESSED = " + String.valueOf(getAdapterPosition()), Toast.LENGTH_SHORT).show();
                 final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                 builder.setTitle("Hello Dialog")
-                        .setMessage("CLICK DIALOG WINDOW FOR ICON " + String.valueOf(getAdapterPosition()) + "ID = " + view.getId())
+                        .setMessage("Delete note " + adapter.getItem(getAdapterPosition()).get(0).toString() + "?")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+//                                dbh.delete(String.valueOf(getAdapterPosition()+1));
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
@@ -103,7 +118,14 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
                 builder.create().show();
             } else {
-                Toast.makeText(view.getContext(), "ROW PRESSED = " + String.valueOf(getAdapterPosition()), Toast.LENGTH_SHORT).show();
+                Intent launch = new Intent(view.getContext(), CreateNoteActivity.class);
+                System.out.println(adapter.getItem(getAdapterPosition()));
+                launch.putExtra("title", adapter.getItem(getAdapterPosition()).get(0).toString());
+                launch.putExtra("subtitle", adapter.getItem(getAdapterPosition()).get(1).toString());
+                launch.putExtra("content", adapter.getItem(getAdapterPosition()).get(2).toString());
+                launch.putExtra("color", adapter.getItem(getAdapterPosition()).get(3).toString());
+                view.getContext().startActivity(launch);
+//                Toast.makeText(view.getContext(), "You clicked " + adapter.getItem(getAdapterPosition()) + " on row number " + getAdapterPosition(), Toast.LENGTH_SHORT).show();
             }
 
             listenerRef.get().onPositionClicked(getAdapterPosition());
