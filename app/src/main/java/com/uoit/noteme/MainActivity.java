@@ -1,6 +1,8 @@
 package com.uoit.noteme;
 
+import android.app.AlertDialog;
 import android.app.SearchManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -89,7 +91,24 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
         // set up the RecyclerView
         RecyclerView recyclerView = findViewById(R.id.notesRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MyRecyclerViewAdapter(this, listData);
+        adapter = new MyRecyclerViewAdapter(this, listData, new ClickListener() {
+            @Override
+            public void onPositionClicked(int position) {
+
+                final AlertDialog.Builder builder = new AlertDialog.Builder(recyclerView.getContext());
+                builder.setTitle("Hello Dialog")
+                        .setMessage("CLICK DIALOG WINDOW FOR ICON " + String.valueOf(position))
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+
+                builder.create().show();
+            }
+
+        });
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
     }
