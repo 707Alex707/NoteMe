@@ -66,7 +66,14 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
 
     @Override
     public void onItemClick(View view, int position) {
-        //Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+        Intent launch = new Intent(this, CreateNoteActivity.class);
+        System.out.println(adapter.getItem(position));
+        launch.putExtra("title", adapter.getItem(position).get(0).toString());
+        launch.putExtra("subtitle", adapter.getItem(position).get(1).toString());
+        launch.putExtra("content", adapter.getItem(position).get(2).toString());
+        launch.putExtra("color", adapter.getItem(position).get(3).toString());
+        startActivity(launch);
+        Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
     }
 
     @Override
