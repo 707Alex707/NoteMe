@@ -62,8 +62,25 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                 return true;
             }
         }else{
-            //Toast.makeText(getApplicationContext(),"Enter a title", Toast.LENGTH_SHORT).show();
             return false;
         }
+    }
+
+    public void update(String id, String title, String subtitle, String note, String color) {
+        if(title.length() > 0) {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(COL2, title);
+            contentValues.put(COL3, subtitle);
+            contentValues.put(COL4, note);
+            contentValues.put(COL5, color);
+
+            db.update(TABLE_NAME, contentValues, "_id = ?", new String[]{id});
+        }
+    }
+
+    public void delete(String id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("tablename","id=?",new String[]{id});
     }
 }
