@@ -101,12 +101,13 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 //                Toast.makeText(view.getContext(), "ITEM PRESSED = " + String.valueOf(getAdapterPosition()), Toast.LENGTH_SHORT).show();
                 final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                 builder.setTitle("Hello Dialog")
-                        .setMessage("Delete note " + adapter.getItem(getAdapterPosition()).get(0).toString() + "?")
+                        .setMessage("Delete note " + adapter.getItem(getAdapterPosition()).get(1).toString() + "?")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-//                                dbh.delete(String.valueOf(getAdapterPosition()+1));
+                                dbh.delete(adapter.getItem(getAdapterPosition()).get(0).toString());
+                                ((MainActivity)view.getContext()).retrieveData("SELECT * FROM note_table");
                             }
                         })
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
