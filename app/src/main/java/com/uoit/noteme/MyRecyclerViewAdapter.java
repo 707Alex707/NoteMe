@@ -120,12 +120,13 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             } else {
                 Intent launch = new Intent(view.getContext(), CreateNoteActivity.class);
                 System.out.println(adapter.getItem(getAdapterPosition()));
-                launch.putExtra("title", adapter.getItem(getAdapterPosition()).get(0).toString());
-                launch.putExtra("subtitle", adapter.getItem(getAdapterPosition()).get(1).toString());
-                launch.putExtra("content", adapter.getItem(getAdapterPosition()).get(2).toString());
-                launch.putExtra("color", adapter.getItem(getAdapterPosition()).get(3).toString());
+                launch.putExtra("ID", adapter.getItem(getAdapterPosition()).get(0).toString());
+                launch.putExtra("title", adapter.getItem(getAdapterPosition()).get(1).toString());
+                launch.putExtra("subtitle", adapter.getItem(getAdapterPosition()).get(2).toString());
+                launch.putExtra("content", adapter.getItem(getAdapterPosition()).get(3).toString());
+                launch.putExtra("color", adapter.getItem(getAdapterPosition()).get(4).toString());
                 view.getContext().startActivity(launch);
-//                Toast.makeText(view.getContext(), "You clicked " + adapter.getItem(getAdapterPosition()) + " on row number " + getAdapterPosition(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(view.getContext(), "You clicked " + adapter.getItem(getAdapterPosition()) + " on row number " + getAdapterPosition(), Toast.LENGTH_SHORT).show();
             }
 
             listenerRef.get().onPositionClicked(getAdapterPosition());

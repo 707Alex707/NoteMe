@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
 
         while(data.moveToNext()){
             ArrayList<String> row = new ArrayList<>();
+            row.add(data.getString(0));
             row.add(data.getString(1));
             row.add(data.getString(2));
             row.add(data.getString(3));
