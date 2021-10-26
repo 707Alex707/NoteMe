@@ -4,7 +4,12 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -21,18 +26,40 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
     DatabaseHelper mDatabaseHelper;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         mDatabaseHelper = new DatabaseHelper(this);
-        retrieveData("SELECT *");
+        retrieveData("SELECT * FROM note_table");
 
         ImageView imageAddNoteMain = findViewById(R.id.imageAddNoteMain);
         imageAddNoteMain.setOnClickListener(v -> startActivityForResult(new Intent(
                 getApplicationContext(), CreateNoteActivity.class), REQUEST_CODE_ADD_NOTE)
         );
+        EditText inputSearch = findViewById(R.id.inputSearch);
+        inputSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.length() > 0){
+                    String query = "SELECT * FROM " + "note_table" + " WHERE title LIKE '%" + charSequence.toString() + "%'";
+                    retrieveData(query);
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
 
     }
 
@@ -44,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
     @Override
     public void onResume(){
         super.onResume();
-        retrieveData("SELECT *");
+        retrieveData("SELECT * FROM note_table");
     }
 
     public void retrieveData(String query){
@@ -67,5 +94,10 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
     }
+
+
+
+
+
 
 }
