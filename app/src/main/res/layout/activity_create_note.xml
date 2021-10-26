@@ -156,9 +156,10 @@
                     android:onClick="setColor"
                     android:tag="#F4CA5E"
                     android:text="Yellow"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/textBlue"
-                    app:layout_constraintStart_toEndOf="@+id/textRed" />
+                    app:layout_constraintStart_toEndOf="@+id/textRed"
+                    app:layout_constraintTop_toBottomOf="@+id/inputNote"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
 
             <Button
                     android:id="@+id/textRed"
@@ -188,6 +189,16 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/textBlue"
                     app:layout_constraintTop_toBottomOf="@+id/inputNote"/>
+
+            <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_image"
+                    android:id="@+id/addImageButton"
+                    app:layout_constraintBottom_toTopOf="@+id/textBlue"
+                    app:layout_constraintTop_toBottomOf="@+id/inputNote"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
