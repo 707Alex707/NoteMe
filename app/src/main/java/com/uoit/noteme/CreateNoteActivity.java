@@ -18,7 +18,6 @@ public class CreateNoteActivity extends AppCompatActivity {
     EditText title;
     EditText subtitle;
     EditText note;
-    private boolean titleEmptyWarned = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,15 +46,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         EditText editText = findViewById(R.id.inputNoteTitle);
         String inputNoteTitleText = editText.getText().toString();
         if(inputNoteTitleText.length() == 0){
-
-            //Send toast warning that title is empty
-            if (!titleEmptyWarned){
-                titleEmptyWarned = true;
-                Toast.makeText(this,"A title must be entered to save a note. Press back again to discard note", Toast.LENGTH_LONG).show();
-                return;
-            } else {
-                Toast.makeText(this,"Note not saved", Toast.LENGTH_SHORT).show();
-            }
+            Toast.makeText(this,"A title must be entered to save a note. Press back to discard note", Toast.LENGTH_LONG).show();
         }else{
             mDatabaseHelper.addData(titleText, subtitleText, noteText, this.noteColor);
             Toast.makeText(this,"Data Successfully Inserted!", Toast.LENGTH_SHORT).show();
