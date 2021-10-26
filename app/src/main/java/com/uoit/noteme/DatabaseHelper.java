@@ -75,12 +75,12 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             contentValues.put(COL4, note);
             contentValues.put(COL5, color);
 
-            db.update(TABLE_NAME, contentValues, "_id = ?", new String[]{id});
+            db.update(TABLE_NAME, contentValues, "ID = ?", new String[]{id});
         }
     }
 
     public void delete(String id){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete("tablename","id=?",new String[]{id});
+        db.delete(TABLE_NAME,"ID=?",new String[]{id});
     }
 }

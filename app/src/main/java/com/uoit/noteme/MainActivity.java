@@ -1,6 +1,8 @@
 package com.uoit.noteme;
 
+import android.app.AlertDialog;
 import android.app.SearchManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -64,17 +66,6 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
 
     @Override
     public void onItemClick(View view, int position) {
-        Intent launch = new Intent(this, CreateNoteActivity.class);
-        System.out.println(adapter.getItem(position));
-        launch.putExtra(("ID"),adapter.getItem(position).get(0).toString());
-        launch.putExtra("title", adapter.getItem(position).get(1).toString());
-        launch.putExtra("subtitle", adapter.getItem(position).get(2).toString());
-        launch.putExtra("content", adapter.getItem(position).get(3).toString());
-        launch.putExtra("color", adapter.getItem(position).get(4).toString());
-        System.out.println(adapter.getItem(position));
-       // launch.putExtra("id",adapter)
-        startActivity(launch);
-        Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -89,7 +80,6 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
 
         while(data.moveToNext()){
             ArrayList<String> row = new ArrayList<>();
-            row.add(data.getString(0));
             row.add(data.getString(1));
             row.add(data.getString(2));
             row.add(data.getString(3));
@@ -100,7 +90,12 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
         // set up the RecyclerView
         RecyclerView recyclerView = findViewById(R.id.notesRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MyRecyclerViewAdapter(this, listData);
+        adapter = new MyRecyclerViewAdapter(this, listData, new ClickListener() {
+            @Override
+            public void onPositionClicked(int position) {
+
+            }
+        }, mDatabaseHelper);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
     }
