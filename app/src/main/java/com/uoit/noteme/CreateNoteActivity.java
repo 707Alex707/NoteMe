@@ -21,6 +21,7 @@ public class CreateNoteActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Bundle extras = getIntent().getExtras();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_note);
         mDatabaseHelper = new DatabaseHelper(this);
@@ -35,6 +36,15 @@ public class CreateNoteActivity extends AppCompatActivity {
 
         ImageView imageDone = findViewById(R.id.imageSave);
         imageDone.setOnClickListener(v -> AddData());
+
+        if (extras != null){
+            title.setText(extras.getString("title"));
+            subtitle.setText(extras.getString("subtitle"));
+            note.setText(extras.getString("content"));
+            this.noteColor = extras.getString("color");
+            View view = this.getWindow().getDecorView();
+            view.setBackgroundColor(Color.parseColor(this.noteColor));
+        }
     }
 
     public void AddData() {
@@ -54,23 +64,9 @@ public class CreateNoteActivity extends AppCompatActivity {
         }
     }
 
-    public void setColorRed(View view) {
-        this.noteColor = "#FF6A6A";
-        view.getRootView().setBackgroundColor(Color.parseColor("#FF6A6A"));
+    public void setColor(View view) {
+        this.noteColor = view.getTag().toString();
+        view.getRootView().setBackgroundColor(Color.parseColor(view.getTag().toString()));
     }
 
-    public void setColorYellow(View view) {
-        this.noteColor = "#F4CA5E";
-        view.getRootView().setBackgroundColor(Color.parseColor("#F4CA5E"));
-    }
-
-    public void setColorBlue(View view) {
-        this.noteColor = "#6AA6FF";
-        view.getRootView().setBackgroundColor(Color.parseColor("#6AA6FF"));
-    }
-
-    public void setColorGreen(View view) {
-        this.noteColor = "#76DC8F";
-        view.getRootView().setBackgroundColor(Color.parseColor("#76DC8F"));
-    }
 }

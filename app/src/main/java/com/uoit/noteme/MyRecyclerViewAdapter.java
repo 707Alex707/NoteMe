@@ -1,6 +1,7 @@
 package com.uoit.noteme;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,13 +70,14 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         @Override
         public void onClick(View view) {
             if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+
         }
     }
 
     // convenience method for getting data at click position
-    String getItem(int id) {
+    ArrayList getItem(int id) {
         // need to fix
-        return mData.get(0).get(id);
+        return mData.get(id);
     }
 
     // allows clicks events to be caught
