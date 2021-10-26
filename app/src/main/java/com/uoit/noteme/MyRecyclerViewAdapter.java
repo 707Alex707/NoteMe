@@ -37,10 +37,10 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         List<String> notes = mData.get(position);
-        holder.title.setText(notes.get(0));
-        holder.subtitle.setText(notes.get(1));
-        holder.note.setText(notes.get(2));
-        holder.container.setBackgroundColor(Color.parseColor(notes.get(3)));
+        holder.title.setText(notes.get(1));
+        holder.subtitle.setText(notes.get(2));
+        holder.note.setText(notes.get(3));
+        holder.container.setBackgroundColor(Color.parseColor(notes.get(4)));
 
     }
 

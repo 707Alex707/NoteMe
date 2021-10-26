@@ -66,10 +66,13 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
     public void onItemClick(View view, int position) {
         Intent launch = new Intent(this, CreateNoteActivity.class);
         System.out.println(adapter.getItem(position));
-        launch.putExtra("title", adapter.getItem(position).get(0).toString());
-        launch.putExtra("subtitle", adapter.getItem(position).get(1).toString());
-        launch.putExtra("content", adapter.getItem(position).get(2).toString());
-        launch.putExtra("color", adapter.getItem(position).get(3).toString());
+        launch.putExtra(("ID"),adapter.getItem(position).get(0).toString());
+        launch.putExtra("title", adapter.getItem(position).get(1).toString());
+        launch.putExtra("subtitle", adapter.getItem(position).get(2).toString());
+        launch.putExtra("content", adapter.getItem(position).get(3).toString());
+        launch.putExtra("color", adapter.getItem(position).get(4).toString());
+        System.out.println(adapter.getItem(position));
+       // launch.putExtra("id",adapter)
         startActivity(launch);
         Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
     }
@@ -86,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
 
         while(data.moveToNext()){
             ArrayList<String> row = new ArrayList<>();
+            row.add(data.getString(0));
             row.add(data.getString(1));
             row.add(data.getString(2));
             row.add(data.getString(3));

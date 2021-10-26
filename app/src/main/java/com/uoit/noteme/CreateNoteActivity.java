@@ -18,6 +18,7 @@ public class CreateNoteActivity extends AppCompatActivity {
     EditText title;
     EditText subtitle;
     EditText note;
+    String noteID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         imageDone.setOnClickListener(v -> AddData());
 
         if (extras != null){
+            this.noteID = extras.getString("ID");
             title.setText(extras.getString("title"));
             subtitle.setText(extras.getString("subtitle"));
             note.setText(extras.getString("content"));
@@ -58,9 +60,9 @@ public class CreateNoteActivity extends AppCompatActivity {
         if(inputNoteTitleText.length() == 0){
             Toast.makeText(this,"A title must be entered to save a note. Press back to discard note", Toast.LENGTH_LONG).show();
         }else{
-            mDatabaseHelper.addData(titleText, subtitleText, noteText, this.noteColor);
-            Toast.makeText(this,"Data Successfully Inserted!", Toast.LENGTH_SHORT).show();
-            onBackPressed();
+                mDatabaseHelper.addData(titleText, subtitleText, noteText, this.noteColor);
+                Toast.makeText(this, "Data Successfully Inserted!", Toast.LENGTH_SHORT).show();
+                onBackPressed();
         }
     }
 
