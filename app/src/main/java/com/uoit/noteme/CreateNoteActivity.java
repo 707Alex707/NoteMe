@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Objects;
 
 public class CreateNoteActivity extends AppCompatActivity {
 
@@ -99,8 +100,6 @@ public class CreateNoteActivity extends AppCompatActivity {
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent,"Select Picture"), SELECT_PICTURE);
-        } else {
-            Toast.makeText(this,"Permission required to access files", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -136,6 +135,20 @@ public class CreateNoteActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
+        for (int i = 0; i < permissions.length; i++) {
+            Log.d("DEBUG", "Permission " + permissions[i] + " " + grantResults[i]);
+            if (Objects.equals(permissions[i], Manifest.permission.READ_EXTERNAL_STORAGE)){
+                if (grantResults[i] == PackageManager.PERMISSION_DENIED){
+                    Toast.makeText(this,"Permission required to access files", Toast.LENGTH_SHORT).show();
+                } else if (grantResults[i] == PackageManager.PERMISSION_GRANTED){
+                    selectImage();
+                }
             }
         }
     }
