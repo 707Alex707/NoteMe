@@ -50,8 +50,9 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
                 if (charSequence.length() > 0){
                     String query = "SELECT * FROM " + "note_table" + " WHERE title LIKE '%" + charSequence.toString() + "%'";
                     retrieveData(query);
+                }else{
+                    retrieveData("SELECT * FROM " + "note_table");
                 }
-
             }
 
             @Override
@@ -94,10 +95,4 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
     }
-
-
-
-
-
-
 }
