@@ -66,6 +66,10 @@ public class CreateNoteActivity extends AppCompatActivity {
             this.noteColor = extras.getString("color");
             selectedImageBytes = extras.getByteArray("img");
             noteImg.setImageBitmap(getImage(selectedImageBytes));
+            // Set image view invisible so no white space
+            if(selectedImageBytes.length  == 0){
+                noteImg.setVisibility(View.GONE);
+            }
             View view = this.getWindow().getDecorView();
             view.setBackgroundColor(Color.parseColor(this.noteColor));
         }

@@ -59,6 +59,11 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         holder.container.setBackgroundColor(Color.parseColor(notes.get(4)));
         holder.noteImage.setImageBitmap(getImage(img.get(position)));
 
+        // Set image view invisible so no white space
+        if(img.get(position).length  == 0){
+            holder.noteImage.setVisibility(View.GONE);
+        }
+
     }
 
     // total number of rows

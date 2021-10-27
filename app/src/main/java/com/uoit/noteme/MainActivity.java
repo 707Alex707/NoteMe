@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.length() > 0){
-                    String query = "SELECT * FROM " + "note_table" + " WHERE title LIKE '%" + charSequence.toString() + "%'";
+                    String query = "SELECT * FROM " + "note_table" + " WHERE title LIKE '%" + charSequence.toString() + "%' OR subtitle LIKE '%" + charSequence.toString() + "%' OR text LIKE '%" + charSequence.toString() + "%'";
                     retrieveData(query);
                 }else{
                     retrieveData("SELECT * FROM " + "note_table");
