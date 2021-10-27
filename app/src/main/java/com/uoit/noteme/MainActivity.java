@@ -93,12 +93,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
         // set up the RecyclerView
         RecyclerView recyclerView = findViewById(R.id.notesRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MyRecyclerViewAdapter(this, listData, imageData, new ClickListener() {
-            @Override
-            public void onPositionClicked(int position) {
-
-            }
-        }, mDatabaseHelper);
+        adapter = new MyRecyclerViewAdapter(this, listData, imageData);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
     }

@@ -30,39 +30,76 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
-    private final ClickListener listener;
-    private DatabaseHelper dbh;
-
     // data is passed into the constructor
-    MyRecyclerViewAdapter(Context context, ArrayList<ArrayList<String>> data, ArrayList<byte[]> image, ClickListener listener, DatabaseHelper mDatabaseHelper) {
+    MyRecyclerViewAdapter(Context context, ArrayList<ArrayList<String>> data, ArrayList<byte[]> image) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         this.img = image;
-        this.listener = listener;
-        this.dbh = mDatabaseHelper;
     }
 
     // inflates the row layout from xml when needed
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.recyclerview_row, parent, false);
-        return new ViewHolder(view, listener, getAdapter());
+        return new ViewHolder(view);
     }
 
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         List<String> notes = mData.get(position);
+        byte[] image = img.get(position);
         holder.title.setText(notes.get(1));
         holder.subtitle.setText(notes.get(2));
         holder.note.setText(notes.get(3));
         holder.container.setBackgroundColor(Color.parseColor(notes.get(4)));
-        holder.noteImage.setImageBitmap(getImage(img.get(position)));
+        holder.noteImage.setImageBitmap(getImage(image));
 
         // Set image view invisible so no white space
         if(img.get(position).length  == 0){
             holder.noteImage.setVisibility(View.GONE);
         }
+
+        // On click listener for container
+        holder.container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent launch = new Intent(view.getContext(), CreateNoteActivity.class);
+                launch.putExtra("ID", notes.get(0));
+                launch.putExtra("title", notes.get(1));
+                launch.putExtra("subtitle", notes.get(2));
+                launch.putExtra("content", notes.get(3));
+                launch.putExtra("color", notes.get(4));
+                launch.putExtra("img", image);
+                view.getContext().startActivity(launch);
+            }
+        });
+
+        // On click listener for trash icon
+        holder.iconImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setTitle("Delete note")
+                        .setMessage("Delete note " + notes.get(1) + "?")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                DatabaseHelper dbh = new DatabaseHelper(view.getContext());
+                                dbh.delete(notes.get(0));
+                                ((MainActivity) view.getContext()).retrieveData("SELECT * FROM note_table");
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+
+                builder.create().show();
+            }
+        });
 
     }
 
@@ -86,68 +123,29 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         LinearLayout container;
         ImageView noteImage;
 
-        private ImageView iconImageView;
+        ImageView iconImageView;
         private WeakReference<ClickListener> listenerRef;
         private MyRecyclerViewAdapter adapter;
 
-        ViewHolder(View itemView, ClickListener listener, MyRecyclerViewAdapter adapter) {
+        ViewHolder(View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.row_title);
             subtitle = itemView.findViewById(R.id.row_subtitle);
             note = itemView.findViewById(R.id.row_note);
             container = itemView.findViewById(R.id.note_container);
             noteImage = itemView.findViewById(R.id.noteImage);
-            itemView.setOnClickListener(this);
-
-            listenerRef = new WeakReference<>(listener);
             iconImageView = (ImageView) itemView.findViewById(R.id.imageButton3);
-            iconImageView.setOnClickListener(this);
-
-            this.adapter = adapter;
+            itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            if (view.getId() == iconImageView.getId()) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                builder.setTitle("Delete note")
-                        .setMessage("Delete note " + adapter.getItem(getAdapterPosition()).get(1).toString() + "?")
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                dbh.delete(adapter.getItem(getAdapterPosition()).get(0).toString());
-                                ((MainActivity)view.getContext()).retrieveData("SELECT * FROM note_table");
-                            }
-                        })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        });
-
-                builder.create().show();
-            } else {
-                Intent launch = new Intent(view.getContext(), CreateNoteActivity.class);
-                launch.putExtra("ID", adapter.getItem(getAdapterPosition()).get(0).toString());
-                launch.putExtra("title", adapter.getItem(getAdapterPosition()).get(1).toString());
-                launch.putExtra("subtitle", adapter.getItem(getAdapterPosition()).get(2).toString());
-                launch.putExtra("content", adapter.getItem(getAdapterPosition()).get(3).toString());
-                launch.putExtra("color", adapter.getItem(getAdapterPosition()).get(4).toString());
-                launch.putExtra("img", adapter.getImageItem(getAdapterPosition()));
-                view.getContext().startActivity(launch);
-                //Toast.makeText(view.getContext(), "You clicked " + adapter.getItem(getAdapterPosition()) + " on row number " + getAdapterPosition(), Toast.LENGTH_SHORT).show();
-            }
-
-            listenerRef.get().onPositionClicked(getAdapterPosition());
             if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
         }
     }
 
     // convenience method for getting data at click position
     ArrayList getItem(int id) {
-        // need to fix
         return mData.get(id);
     }
 
