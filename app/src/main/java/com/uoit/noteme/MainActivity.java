@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
     public void retrieveData(String query){
         Cursor data = mDatabaseHelper.fetch(query);
         ArrayList<ArrayList<String>> listData = new ArrayList<ArrayList<String>>();
-        byte[] image = new byte[0];
+        ArrayList<byte[]> imageData = new ArrayList<byte[]>();
 
         while(data.moveToNext()){
             ArrayList<String> row = new ArrayList<>();
@@ -87,13 +87,13 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
             row.add(data.getString(3));
             row.add(data.getString(4));
             listData.add(row);
-            image = data.getBlob(5);
+            imageData.add(data.getBlob(5));
         }
 
         // set up the RecyclerView
         RecyclerView recyclerView = findViewById(R.id.notesRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MyRecyclerViewAdapter(this, listData, image, new ClickListener() {
+        adapter = new MyRecyclerViewAdapter(this, listData, imageData, new ClickListener() {
             @Override
             public void onPositionClicked(int position) {
 

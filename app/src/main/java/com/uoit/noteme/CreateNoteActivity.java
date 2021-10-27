@@ -62,6 +62,7 @@ public class CreateNoteActivity extends AppCompatActivity {
             subtitle.setText(extras.getString("subtitle"));
             note.setText(extras.getString("content"));
             this.noteColor = extras.getString("color");
+            selectedImageBytes = extras.getByteArray("img");
             View view = this.getWindow().getDecorView();
             view.setBackgroundColor(Color.parseColor(this.noteColor));
         }

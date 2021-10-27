@@ -26,7 +26,7 @@ import java.util.List;
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> {
 
     private ArrayList<ArrayList<String>> mData;
-    private byte[] img;
+    private ArrayList<byte[]> img;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
@@ -34,7 +34,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     private DatabaseHelper dbh;
 
     // data is passed into the constructor
-    MyRecyclerViewAdapter(Context context, ArrayList<ArrayList<String>> data, byte[] image, ClickListener listener, DatabaseHelper mDatabaseHelper) {
+    MyRecyclerViewAdapter(Context context, ArrayList<ArrayList<String>> data, ArrayList<byte[]> image, ClickListener listener, DatabaseHelper mDatabaseHelper) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         this.img = image;
@@ -57,7 +57,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         holder.subtitle.setText(notes.get(2));
         holder.note.setText(notes.get(3));
         holder.container.setBackgroundColor(Color.parseColor(notes.get(4)));
-        holder.noteImage.setImageBitmap(getImage(img));
+        holder.noteImage.setImageBitmap(getImage(img.get(position)));
 
     }
 
@@ -79,9 +79,9 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         TextView subtitle;
         TextView note;
         LinearLayout container;
+        ImageView noteImage;
 
         private ImageView iconImageView;
-        private ImageView noteImage;
         private WeakReference<ClickListener> listenerRef;
         private MyRecyclerViewAdapter adapter;
 
@@ -125,12 +125,12 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
                 builder.create().show();
             } else {
                 Intent launch = new Intent(view.getContext(), CreateNoteActivity.class);
-                System.out.println(adapter.getItem(getAdapterPosition()));
                 launch.putExtra("ID", adapter.getItem(getAdapterPosition()).get(0).toString());
                 launch.putExtra("title", adapter.getItem(getAdapterPosition()).get(1).toString());
                 launch.putExtra("subtitle", adapter.getItem(getAdapterPosition()).get(2).toString());
                 launch.putExtra("content", adapter.getItem(getAdapterPosition()).get(3).toString());
                 launch.putExtra("color", adapter.getItem(getAdapterPosition()).get(4).toString());
+                launch.putExtra("img", adapter.getImageItem(getAdapterPosition()));
                 view.getContext().startActivity(launch);
                 //Toast.makeText(view.getContext(), "You clicked " + adapter.getItem(getAdapterPosition()) + " on row number " + getAdapterPosition(), Toast.LENGTH_SHORT).show();
             }
@@ -144,6 +144,12 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     ArrayList getItem(int id) {
         // need to fix
         return mData.get(id);
+    }
+
+    // convenience method for getting data at click position
+    byte[] getImageItem(int id) {
+        // need to fix
+        return img.get(id);
     }
 
     // allows clicks events to be caught
