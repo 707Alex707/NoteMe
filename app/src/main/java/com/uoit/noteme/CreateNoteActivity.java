@@ -1,7 +1,9 @@
 package com.uoit.noteme;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -66,12 +68,12 @@ public class CreateNoteActivity extends AppCompatActivity {
             this.noteColor = extras.getString("color");
             selectedImageBytes = extras.getByteArray("img");
             noteImg.setImageBitmap(getImage(selectedImageBytes));
-            // Set image view invisible so no white space
-            if(selectedImageBytes.length  == 0){
-                noteImg.setVisibility(View.GONE);
-            }
             View view = this.getWindow().getDecorView();
             view.setBackgroundColor(Color.parseColor(this.noteColor));
+        }
+        // Set image view invisible so no white space
+        if(selectedImageBytes.length  == 0){
+            noteImg.setVisibility(View.GONE);
         }
     }
 
@@ -148,6 +150,7 @@ public class CreateNoteActivity extends AppCompatActivity {
 
                     // Display image
                     noteImg.setImageBitmap(getImage(selectedImageBytes));
+                    noteImg.setVisibility(View.VISIBLE);
                     Log.d("DEBUG", "Image with size of " + String.valueOf(selectedImageBytes.length) + " bytes saved");
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -174,5 +177,28 @@ public class CreateNoteActivity extends AppCompatActivity {
     // convert from byte array to bitmap
     public static Bitmap getImage(byte[] image) {
         return BitmapFactory.decodeByteArray(image, 0, image.length);
+    }
+
+    public void deleteNote(View view){
+        final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+        builder.setTitle("Delete note")
+                .setMessage("Delete note?")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(noteID != null){
+                            mDatabaseHelper.delete(noteID);
+                            onBackPressed();
+                        }
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
+        builder.create().show();
     }
 }
