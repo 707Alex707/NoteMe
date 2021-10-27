@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +26,7 @@ import java.util.List;
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> {
 
     private ArrayList<ArrayList<String>> mData;
+    private byte[] img;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
@@ -31,9 +34,10 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     private DatabaseHelper dbh;
 
     // data is passed into the constructor
-    MyRecyclerViewAdapter(Context context, ArrayList<ArrayList<String>> data, ClickListener listener, DatabaseHelper mDatabaseHelper) {
+    MyRecyclerViewAdapter(Context context, ArrayList<ArrayList<String>> data, byte[] image, ClickListener listener, DatabaseHelper mDatabaseHelper) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
+        this.img = image;
         this.listener = listener;
         this.dbh = mDatabaseHelper;
     }
@@ -53,6 +57,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         holder.subtitle.setText(notes.get(2));
         holder.note.setText(notes.get(3));
         holder.container.setBackgroundColor(Color.parseColor(notes.get(4)));
+        holder.noteImage.setImageBitmap(getImage(img));
 
     }
 
@@ -76,6 +81,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         LinearLayout container;
 
         private ImageView iconImageView;
+        private ImageView noteImage;
         private WeakReference<ClickListener> listenerRef;
         private MyRecyclerViewAdapter adapter;
 
@@ -85,6 +91,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             subtitle = itemView.findViewById(R.id.row_subtitle);
             note = itemView.findViewById(R.id.row_note);
             container = itemView.findViewById(R.id.note_container);
+            noteImage = itemView.findViewById(R.id.noteImage);
             itemView.setOnClickListener(this);
 
             listenerRef = new WeakReference<>(listener);
@@ -96,11 +103,9 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
         @Override
         public void onClick(View view) {
-//            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
             if (view.getId() == iconImageView.getId()) {
-//                Toast.makeText(view.getContext(), "ITEM PRESSED = " + String.valueOf(getAdapterPosition()), Toast.LENGTH_SHORT).show();
                 final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                builder.setTitle("Hello Dialog")
+                builder.setTitle("Delete note")
                         .setMessage("Delete note " + adapter.getItem(getAdapterPosition()).get(1).toString() + "?")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
@@ -149,5 +154,10 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
         void onItemClick(View view, int position);
+    }
+
+    // convert from byte array to bitmap
+    public static Bitmap getImage(byte[] image) {
+        return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
 }

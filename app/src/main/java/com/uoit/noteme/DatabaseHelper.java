@@ -8,6 +8,8 @@ import android.database.Cursor;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.sql.Blob;
+
 public class DatabaseHelper extends SQLiteOpenHelper{
     private static final String TAG = "DatabaseHelper";
 
@@ -17,6 +19,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     private static final String COL3 = "subtitle";
     private static final String COL4 = "text";
     private static final String COL5 = "color";
+    private static final String COL6 = "img";
 
     public DatabaseHelper(Context context){
         super(context, TABLE_NAME, null, 1);
@@ -24,7 +27,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db){
-        String createTable = "CREATE TABLE " + TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " + COL2 + " TEXT, "  + COL3 + " TEXT, "  + COL4+ " TEXT, " + COL5+ " TEXT)";
+        String createTable = "CREATE TABLE " + TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " + COL2 + " TEXT, "  + COL3 + " TEXT, "  + COL4+ " TEXT, " + COL5+ " TEXT, " + COL6 +" BLOB)";
         db.execSQL(createTable);
     }
 
@@ -42,7 +45,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         return data;
     }
 
-    public boolean addData(String title, String subtitle, String note, String color){
+    public boolean addData(String title, String subtitle, String note, String color, byte[] image){
         if(title.length() > 0) {
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
@@ -50,6 +53,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             contentValues.put(COL3, subtitle);
             contentValues.put(COL4, note);
             contentValues.put(COL5, color);
+            contentValues.put(COL6, image);
 
             Log.d(TAG, "addData: Adding " + title + ", " + subtitle + ", " + note + " to " + TABLE_NAME);
 
@@ -66,7 +70,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         }
     }
 
-    public void update(String id, String title, String subtitle, String note, String color) {
+    public void update(String id, String title, String subtitle, String note, String color, byte[] image) {
         if(title.length() > 0) {
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
@@ -74,6 +78,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             contentValues.put(COL3, subtitle);
             contentValues.put(COL4, note);
             contentValues.put(COL5, color);
+            contentValues.put(COL6, image);
 
             db.update(TABLE_NAME, contentValues, "ID = ?", new String[]{id});
         }

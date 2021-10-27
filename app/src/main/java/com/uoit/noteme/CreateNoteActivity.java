@@ -32,7 +32,7 @@ public class CreateNoteActivity extends AppCompatActivity {
     String noteID;
 
     private static final int SELECT_PICTURE = 252;
-    private byte[] selectedImageBytes;
+    private byte[] selectedImageBytes = new byte[0];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,11 +80,11 @@ public class CreateNoteActivity extends AppCompatActivity {
         }else{
             int IDExists = (mDatabaseHelper.fetch("SELECT 1 FROM note_table WHERE ID=" + noteID)).getCount();
             if (IDExists == 1){
-                mDatabaseHelper.update(noteID, titleText, subtitleText, noteText, this.noteColor);
+                mDatabaseHelper.update(noteID, titleText, subtitleText, noteText, this.noteColor, this.selectedImageBytes);
                 onBackPressed();
             }
             else{
-                mDatabaseHelper.addData(titleText, subtitleText, noteText, this.noteColor);
+                mDatabaseHelper.addData(titleText, subtitleText, noteText, this.noteColor, this.selectedImageBytes);
                 Toast.makeText(this, "Data Successfully Inserted!", Toast.LENGTH_SHORT).show();
                 onBackPressed();
             }
