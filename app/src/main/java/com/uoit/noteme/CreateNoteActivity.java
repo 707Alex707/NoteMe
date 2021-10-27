@@ -30,6 +30,7 @@ public class CreateNoteActivity extends AppCompatActivity {
     EditText subtitle;
     EditText note;
     String noteID;
+    ImageView noteImg;
 
     private static final int SELECT_PICTURE = 252;
     private byte[] selectedImageBytes = new byte[0];
@@ -45,6 +46,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         title = findViewById(R.id.inputNoteTitle);
         subtitle = findViewById(R.id.inputNoteSubTitle);
         note = findViewById(R.id.inputNote);
+        noteImg = findViewById(R.id.imgActivity);
 
         ImageView imageBack = findViewById(R.id.imageBack);
         imageBack.setOnClickListener(v -> onBackPressed());
@@ -63,6 +65,7 @@ public class CreateNoteActivity extends AppCompatActivity {
             note.setText(extras.getString("content"));
             this.noteColor = extras.getString("color");
             selectedImageBytes = extras.getByteArray("img");
+            noteImg.setImageBitmap(getImage(selectedImageBytes));
             View view = this.getWindow().getDecorView();
             view.setBackgroundColor(Color.parseColor(this.noteColor));
         }
@@ -138,6 +141,9 @@ public class CreateNoteActivity extends AppCompatActivity {
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                     selectedImageBytes = baos.toByteArray();
+
+                    // Display image
+                    noteImg.setImageBitmap(getImage(selectedImageBytes));
                     Log.d("DEBUG", "Image with size of " + String.valueOf(selectedImageBytes.length) + " bytes saved");
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -159,5 +165,10 @@ public class CreateNoteActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    // convert from byte array to bitmap
+    public static Bitmap getImage(byte[] image) {
+        return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
 }
