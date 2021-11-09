@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -35,7 +36,9 @@ public class CreateNoteActivity extends AppCompatActivity {
     ImageView noteImg;
 
     private static final int SELECT_PICTURE = 252;
+    private static final int SELECT_CAMERA_PICTURE_REQUEST_CODE = 253;
     private byte[] selectedImageBytes = new byte[0];
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +132,9 @@ public class CreateNoteActivity extends AppCompatActivity {
         Log.d("DEBUG",  "Have storage permission: " + String.valueOf(havePermission));
         if (havePermission){
             //Do stuff with camera
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, SELECT_CAMERA_PICTURE_REQUEST_CODE);
+
         }
     }
 
@@ -179,6 +185,17 @@ public class CreateNoteActivity extends AppCompatActivity {
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
+
+            } else if (requestCode == SELECT_CAMERA_PICTURE_REQUEST_CODE){
+                Bitmap photo = (Bitmap) data.getExtras().get("data");
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                selectedImageBytes = baos.toByteArray();
+
+                // Display image
+                noteImg.setImageBitmap(getImage(selectedImageBytes));
+                noteImg.setVisibility(View.VISIBLE);
+                Log.d("DEBUG", "Image with size of " + String.valueOf(selectedImageBytes.length) + " bytes saved");
 
             }
         }
