@@ -60,6 +60,10 @@ public class CreateNoteActivity extends AppCompatActivity {
         ImageButton imageButton = findViewById(R.id.addImageButton);
         imageButton.setOnClickListener(v -> selectImage());
 
+        //addImageFromCameraButton
+        ImageButton imageCameraButton = findViewById(R.id.addImageFromCameraButton);
+        imageCameraButton.setOnClickListener(v -> addImageFromCamera());
+
         if (extras != null){
             this.noteID = extras.getString("ID");
             title.setText(extras.getString("title"));
@@ -120,6 +124,14 @@ public class CreateNoteActivity extends AppCompatActivity {
         }
     }
 
+    public void addImageFromCamera(){
+        boolean havePermission = checkPermissionForCamera();
+        Log.d("DEBUG",  "Have storage permission: " + String.valueOf(havePermission));
+        if (havePermission){
+            //Do stuff with camera
+        }
+    }
+
     //Checks if pictures to access files was granted
     private boolean checkPermissionForReadExternalStorage() {
         if (ContextCompat.checkSelfPermission(getBaseContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
@@ -128,6 +140,18 @@ public class CreateNoteActivity extends AppCompatActivity {
         } else {
             //Permission not granted, request it
             String[] perms = {Manifest.permission.READ_EXTERNAL_STORAGE};
+            requestPermissions(perms, 1);
+            return false;
+        }
+    }
+
+    private boolean checkPermissionForCamera(){
+        if (ContextCompat.checkSelfPermission(getBaseContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
+            //Permission granted
+            return true;
+        } else {
+            //Permission not granted, request it
+            String[] perms = {Manifest.permission.CAMERA};
             requestPermissions(perms, 1);
             return false;
         }
@@ -169,6 +193,14 @@ public class CreateNoteActivity extends AppCompatActivity {
                     Toast.makeText(this,"Permission required to access files", Toast.LENGTH_SHORT).show();
                 } else if (grantResults[i] == PackageManager.PERMISSION_GRANTED){
                     selectImage();
+                }
+            }
+
+            if (Objects.equals(permissions[i], Manifest.permission.CAMERA)){
+                if (grantResults[i] == PackageManager.PERMISSION_DENIED){
+                    Toast.makeText(this,"Permission required to take picture", Toast.LENGTH_SHORT).show();
+                } else if (grantResults[i] == PackageManager.PERMISSION_GRANTED){
+                    addImageFromCamera();
                 }
             }
         }
