@@ -74,7 +74,8 @@ public class CreateNoteActivity extends AppCompatActivity {
             note.setText(extras.getString("content"));
             this.noteColor = extras.getString("color");
             selectedImageBytes = extras.getByteArray("img");
-            noteImg.setImageBitmap(getImage(selectedImageBytes));
+            Bitmap bitmap = Bitmap.createScaledBitmap(getImage(selectedImageBytes),2000, 2500, false);
+            noteImg.setImageBitmap(bitmap);
             View view = this.getWindow().getDecorView();
             view.setBackgroundColor(Color.parseColor(this.noteColor));
         }
@@ -193,7 +194,8 @@ public class CreateNoteActivity extends AppCompatActivity {
                 selectedImageBytes = baos.toByteArray();
 
                 // Display image
-                noteImg.setImageBitmap(getImage(selectedImageBytes));
+                Bitmap bitmap = Bitmap.createScaledBitmap(getImage(selectedImageBytes),2000, 2500, false);
+                noteImg.setImageBitmap(bitmap);
                 noteImg.setVisibility(View.VISIBLE);
                 Log.d("DEBUG", "Image with size of " + String.valueOf(selectedImageBytes.length) + " bytes saved");
 

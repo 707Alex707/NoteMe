@@ -69,13 +69,13 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageView
-                    android:id="@+id/imgActivity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="250dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
-                    tools:srcCompat="@tools:sample/avatars"/>
+                android:id="@+id/imgActivity"
+                android:layout_width="wrap_content"
+                android:layout_height="250dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+                tools:srcCompat="@tools:sample/avatars" />
 
             <EditText
                     android:id="@+id/inputNoteTitle"
