@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -35,7 +36,9 @@ public class CreateNoteActivity extends AppCompatActivity {
     ImageView noteImg;
 
     private static final int SELECT_PICTURE = 252;
+    private static final int SELECT_CAMERA_PICTURE_REQUEST_CODE = 253;
     private byte[] selectedImageBytes = new byte[0];
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,10 @@ public class CreateNoteActivity extends AppCompatActivity {
         //addImageButton
         ImageButton imageButton = findViewById(R.id.addImageButton);
         imageButton.setOnClickListener(v -> selectImage());
+
+        //addImageFromCameraButton
+        ImageButton imageCameraButton = findViewById(R.id.addImageFromCameraButton);
+        imageCameraButton.setOnClickListener(v -> addImageFromCamera());
 
         if (extras != null){
             this.noteID = extras.getString("ID");
@@ -120,6 +127,17 @@ public class CreateNoteActivity extends AppCompatActivity {
         }
     }
 
+    public void addImageFromCamera(){
+        boolean havePermission = checkPermissionForCamera();
+        Log.d("DEBUG",  "Have storage permission: " + String.valueOf(havePermission));
+        if (havePermission){
+            //Do stuff with camera
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, SELECT_CAMERA_PICTURE_REQUEST_CODE);
+
+        }
+    }
+
     //Checks if pictures to access files was granted
     private boolean checkPermissionForReadExternalStorage() {
         if (ContextCompat.checkSelfPermission(getBaseContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
@@ -128,6 +146,18 @@ public class CreateNoteActivity extends AppCompatActivity {
         } else {
             //Permission not granted, request it
             String[] perms = {Manifest.permission.READ_EXTERNAL_STORAGE};
+            requestPermissions(perms, 1);
+            return false;
+        }
+    }
+
+    private boolean checkPermissionForCamera(){
+        if (ContextCompat.checkSelfPermission(getBaseContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
+            //Permission granted
+            return true;
+        } else {
+            //Permission not granted, request it
+            String[] perms = {Manifest.permission.CAMERA};
             requestPermissions(perms, 1);
             return false;
         }
@@ -156,6 +186,17 @@ public class CreateNoteActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
+            } else if (requestCode == SELECT_CAMERA_PICTURE_REQUEST_CODE){
+                Bitmap photo = (Bitmap) data.getExtras().get("data");
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                selectedImageBytes = baos.toByteArray();
+
+                // Display image
+                noteImg.setImageBitmap(getImage(selectedImageBytes));
+                noteImg.setVisibility(View.VISIBLE);
+                Log.d("DEBUG", "Image with size of " + String.valueOf(selectedImageBytes.length) + " bytes saved");
+
             }
         }
     }
@@ -169,6 +210,14 @@ public class CreateNoteActivity extends AppCompatActivity {
                     Toast.makeText(this,"Permission required to access files", Toast.LENGTH_SHORT).show();
                 } else if (grantResults[i] == PackageManager.PERMISSION_GRANTED){
                     selectImage();
+                }
+            }
+
+            if (Objects.equals(permissions[i], Manifest.permission.CAMERA)){
+                if (grantResults[i] == PackageManager.PERMISSION_DENIED){
+                    Toast.makeText(this,"Permission required to take picture", Toast.LENGTH_SHORT).show();
+                } else if (grantResults[i] == PackageManager.PERMISSION_GRANTED){
+                    addImageFromCamera();
                 }
             }
         }
