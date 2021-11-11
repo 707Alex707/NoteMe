@@ -68,20 +68,21 @@ public class CreateNoteActivity extends AppCompatActivity {
         imageCameraButton.setOnClickListener(v -> addImageFromCamera());
 
         if (extras != null){
+            Bitmap bitmap = null;
             this.noteID = extras.getString("ID");
             title.setText(extras.getString("title"));
             subtitle.setText(extras.getString("subtitle"));
             note.setText(extras.getString("content"));
             this.noteColor = extras.getString("color");
             selectedImageBytes = extras.getByteArray("img");
-            Bitmap bitmap = Bitmap.createScaledBitmap(getImage(selectedImageBytes),2000, 2500, false);
-            noteImg.setImageBitmap(bitmap);
+            if(selectedImageBytes.length > 0){
+                bitmap = Bitmap.createScaledBitmap(getImage(selectedImageBytes),2000, 2500, false);
+                noteImg.setImageBitmap(bitmap);
+            }else{
+                noteImg.setVisibility(View.GONE);
+            }
             View view = this.getWindow().getDecorView();
             view.setBackgroundColor(Color.parseColor(this.noteColor));
-        }
-        // Set image view invisible so no white space
-        if(selectedImageBytes.length  == 0){
-            noteImg.setVisibility(View.GONE);
         }
     }
 

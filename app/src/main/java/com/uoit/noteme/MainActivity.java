@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -116,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
     public void exportData(){
         Cursor data = mDatabaseHelper.fetch("SELECT * FROM note_table");
 
-        File file = new File(this.getFilesDir(), "export.json");
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "export.json");
         FileWriter fileWriter = null;
         BufferedWriter bufferedWriter = null;
 
