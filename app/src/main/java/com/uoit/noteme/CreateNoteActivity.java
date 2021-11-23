@@ -66,6 +66,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         //addImageFromCameraButton
         ImageButton imageCameraButton = findViewById(R.id.addImageFromCameraButton);
         imageCameraButton.setOnClickListener(v -> addImageFromCamera());
+        noteImg.setVisibility(View.GONE);
 
         if (extras != null){
             Bitmap bitmap = null;
@@ -76,6 +77,7 @@ public class CreateNoteActivity extends AppCompatActivity {
             this.noteColor = extras.getString("color");
             selectedImageBytes = extras.getByteArray("img");
             if(selectedImageBytes.length > 0){
+                noteImg.setVisibility(View.VISIBLE);
                 bitmap = Bitmap.createScaledBitmap(getImage(selectedImageBytes),2000, 2500, false);
                 noteImg.setImageBitmap(bitmap);
             }else{
