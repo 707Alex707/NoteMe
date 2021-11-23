@@ -59,6 +59,14 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         if(img.get(position).length  == 0){
             holder.noteImage.setVisibility(View.GONE);
         }
+        // Hide subtitle when empty
+        if(notes.get(2).equals("")){
+            holder.subtitle.setVisibility(View.GONE);
+        }
+        // Hide notes when empty
+        if(notes.get(3).equals("")){
+            holder.note.setVisibility(View.GONE);
+        }
 
         // On click listener for container
         holder.container.setOnClickListener(new View.OnClickListener() {
