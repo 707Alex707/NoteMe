@@ -15,14 +15,18 @@ import java.util.List;
 public class DrawActivity extends AppCompatActivity {
 
     drawingCanvas canvas;
-    String[] itemTypes = {"Circle", "Square", "Line"};
-    String[] itemSize = {"1", "3", "5", "10", "20", "30", "40", "50", "75", "100"};
+    String[] itemTypes = {"Circle", "Square", "Line", "Hollow Square", "Hollow Circle", "Text"};
+    String[] itemSize = {"1", "3", "5", "10", "20", "30", "40", "50", "75", "100", "125", "150", "200"};
     Spinner itemTypeSpinner;
     Spinner itemSizeSpinner;
+    EditText insertTextContent;
+    boolean insertText = false;
 
     Float lineStartx = null;
     Float lineStarty = null;;
     ArrayList<float[]> lines = new ArrayList<float[]>();
+
+    ArrayList<String[]> textToDraw = new ArrayList<String[]>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,8 @@ public class DrawActivity extends AppCompatActivity {
         LinearLayout parent = findViewById(R.id.canvas);
         canvas = new drawingCanvas(this);
         parent.addView(canvas);
+
+        insertTextContent = findViewById(R.id.InsertTextContent);
 
         //Populate Spinners
         itemTypeSpinner = (Spinner) findViewById(R.id.itemTypeView);
@@ -45,18 +51,54 @@ public class DrawActivity extends AppCompatActivity {
         adapterSize.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         itemSizeSpinner.setAdapter(adapterSize);
 
+        itemTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                TextView textView = findViewById(R.id.TextInputView);
+
+                if (adapterView.getSelectedItem().toString().equals("Text")){
+                    //Show text input box
+                    textView.setVisibility(View.VISIBLE);
+                    insertTextContent.setVisibility(View.VISIBLE);
+                    insertText = true;
+                } else {
+                    //Hide text input box
+                    textView.setVisibility(View.GONE);
+                    insertTextContent.setVisibility(View.GONE);
+                    insertText = false;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
     }
 
     private class drawingCanvas extends View {
-        Paint circlePaint;
+        Paint solidShape;
+        Paint hollowShape;
         Paint linePaint;
-        Path circlePath;
+        Paint textPaint;
+        Path solidShapePath;
+        Path hollowShapePath;
         public drawingCanvas(Context context){
             super(context);
 
-            circlePaint = new Paint();
+            solidShape = new Paint();
+            hollowShape = new Paint();
+            hollowShape.setStyle(Paint.Style.STROKE);
             linePaint = new Paint();
-            circlePath = new Path();
+
+            textPaint = new Paint();
+            Paint textPaint = new Paint();
+            textPaint.setColor(Color.DKGRAY);
+            textPaint.setStyle(Paint.Style.FILL);
+
+            solidShapePath = new Path();
+            hollowShapePath = new Path();
         }
 
         @Override
@@ -68,7 +110,18 @@ public class DrawActivity extends AppCompatActivity {
                 linePaint.setStrokeWidth(lines.get(i)[4]);
                 canvas.drawLine(lines.get(i)[0], lines.get(i)[1], lines.get(i)[2], lines.get(i)[3], linePaint);
             }
-            canvas.drawPath(circlePath, circlePaint);
+
+            for (int i = 0; i < textToDraw.size(); i++) {
+                float xpos = Float.parseFloat(textToDraw.get(i)[1]);
+                float ypos = Float.parseFloat(textToDraw.get(i)[2]);
+                float size = Float.parseFloat(textToDraw.get(i)[3]);
+                textPaint.setTextSize(size);
+                canvas.drawText(textToDraw.get(i)[0], xpos, ypos, textPaint);
+            }
+
+            //Draw shapes
+            canvas.drawPath(solidShapePath, solidShape);
+            canvas.drawPath(hollowShapePath, hollowShape);
         }
 
         private void touchMove(float posx, float poxy){
@@ -77,11 +130,18 @@ public class DrawActivity extends AppCompatActivity {
             String type = itemTypeSpinner.getSelectedItem().toString();
             switch (type){
                 case "Circle":
-                    circlePath.addCircle(posx, poxy, size, Path.Direction.CW);
+                    solidShapePath.addCircle(posx, poxy, size, Path.Direction.CW);
                     break;
                 case "Square":
                     RectF rect = new RectF(posx - size, poxy + size, posx + size, poxy - size);
-                    circlePath.addRect(rect, Path.Direction.CW);
+                    solidShapePath.addRect(rect, Path.Direction.CW);
+                    break;
+                case "Hollow Square":
+                    RectF rect2 = new RectF(posx - size, poxy + size, posx + size, poxy - size);
+                    hollowShapePath.addRect(rect2, Path.Direction.CW);
+                    break;
+                case "Hollow Circle":
+                    hollowShapePath.addCircle(posx, poxy, size, Path.Direction.CW);
                     break;
             }
         }
@@ -110,6 +170,13 @@ public class DrawActivity extends AppCompatActivity {
             lineStarty = null;
         }
 
+        private void insertText(float posx, float posy){
+            if (insertText){
+                float size = Float.parseFloat(itemSizeSpinner.getSelectedItem().toString());
+                textToDraw.add(new String[]{insertTextContent.getText().toString(), String.valueOf(posx), String.valueOf(posy), String.valueOf(size)});
+            }
+        }
+
         @Override
         public boolean onTouchEvent(MotionEvent event){
             float x = event.getX();
@@ -119,6 +186,7 @@ public class DrawActivity extends AppCompatActivity {
                 case MotionEvent.ACTION_DOWN:
                     touchMove(x,y);
                     drawLine(x, y);
+                    insertText(x, y);
                     invalidate();
                     break;
                 case MotionEvent.ACTION_MOVE:

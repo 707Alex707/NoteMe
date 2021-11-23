@@ -15,7 +15,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/itemSizeView"
+            app:layout_constraintTop_toBottomOf="@+id/InsertTextContent"
             android:layout_marginTop="24dp">
 
     </LinearLayout>
@@ -60,6 +60,29 @@
             android:layout_marginTop="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/sizeTV"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="16dp"/>
+
+    <TextView
+            android:text="Insert Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/TextInputView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/InsertTextContent"
+            app:layout_constraintBottom_toBottomOf="@+id/InsertTextContent"
+            android:layout_marginStart="16dp"/>
+
+    <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/InsertTextContent"
+            app:layout_constraintTop_toBottomOf="@+id/itemSizeView"
+            android:layout_marginTop="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/TextInputView"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="16dp"/>
 
