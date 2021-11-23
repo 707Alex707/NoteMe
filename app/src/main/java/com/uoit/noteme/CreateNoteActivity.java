@@ -73,9 +73,6 @@ public class CreateNoteActivity extends AppCompatActivity {
 
         noteImg.setVisibility(View.GONE);
 
-        Intent intent = new Intent(this, DrawActivity.class);
-        startActivity(intent);
-
         if (extras != null){
             Bitmap bitmap = null;
             this.noteID = extras.getString("ID");
@@ -152,8 +149,7 @@ public class CreateNoteActivity extends AppCompatActivity {
 
     // Go to Canvas Activity
     public void GoToCanvas(){
-        Intent launch = new Intent(getBaseContext(), CreateNoteActivity.class);
-
+        Intent launch = new Intent(getBaseContext(), DrawActivity.class);
         getBaseContext().startActivity(launch);
     }
 
