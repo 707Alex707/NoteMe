@@ -99,7 +99,6 @@ public class DrawActivity extends AppCompatActivity {
                 } else {
                     Log.d("DEBUG", "Line ended");
                     lines.add(new float[]{lineStartx, lineStarty, posx, posy, size});
-                    canvas.invalidate();
                     drawLineReset();
                 }
             }
@@ -118,11 +117,13 @@ public class DrawActivity extends AppCompatActivity {
 
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    touchMove(x,y);
                     drawLine(x, y);
+                    invalidate();
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    canvas.touchMove(x, y);
-                    canvas.invalidate();
+                    touchMove(x, y);
+                    invalidate();
                     break;
                 case MotionEvent.ACTION_UP:
                     break;
