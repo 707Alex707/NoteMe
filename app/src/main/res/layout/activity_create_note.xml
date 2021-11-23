@@ -158,19 +158,19 @@
                     app:layout_constraintVertical_bias="0.212"/>
 
             <Button
-                    android:id="@+id/textBlue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:backgroundTint="#6AA6FF"
-                    android:onClick="setColor"
-                    android:tag="#6AA6FF"
-                    android:text="Blue"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/textGreen"
-                    app:layout_constraintStart_toEndOf="@+id/textYellow"
-                    app:layout_constraintTop_toBottomOf="@+id/inputNote"/>
+                android:id="@+id/textBlue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="16dp"
+                android:backgroundTint="#6AA6FF"
+                android:onClick="setColor"
+                android:tag="#6AA6FF"
+                android:text="Blue"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/textGreen"
+                app:layout_constraintStart_toEndOf="@+id/textYellow"
+                app:layout_constraintTop_toBottomOf="@+id/inputNote" />
 
             <Button
                     android:id="@+id/textYellow"
@@ -217,28 +217,38 @@
                     app:layout_constraintTop_toBottomOf="@+id/inputNote"/>
 
             <ImageButton
-                    android:id="@+id/addImageButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toTopOf="@+id/textBlue"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.4"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/inputNote"
-                    app:layout_constraintVertical_bias="0.0"
-                    app:srcCompat="@drawable/ic_image"/>
+                android:id="@+id/addImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="100dp"
+                app:layout_constraintBottom_toTopOf="@+id/textBlue"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/inputNote"
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@drawable/ic_image" />
 
             <ImageButton
-                    android:layout_width="46dp"
-                    android:layout_height="37dp"
-                    app:srcCompat="@android:drawable/ic_menu_camera"
-                    android:id="@+id/addImageFromCameraButton"
-                    android:layout_marginBottom="2dp"
-                    app:layout_constraintBottom_toTopOf="@+id/textYellow"
-                    app:layout_constraintTop_toBottomOf="@+id/inputNote"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.6"/>
+                android:id="@+id/addImageFromCameraButton"
+                android:layout_width="46dp"
+                android:layout_height="37dp"
+                android:layout_marginBottom="2dp"
+                app:layout_constraintBottom_toTopOf="@+id/textYellow"
+                app:layout_constraintEnd_toStartOf="@+id/canvasButton"
+                app:layout_constraintStart_toEndOf="@+id/addImageButton"
+                app:layout_constraintTop_toBottomOf="@+id/inputNote"
+                app:layout_constraintVertical_bias="1.0"
+                app:srcCompat="@android:drawable/ic_menu_camera" />
+
+            <ImageButton
+                android:id="@+id/canvasButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="100dp"
+                android:layout_marginBottom="2dp"
+                app:layout_constraintBottom_toTopOf="@+id/textBlue"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/inputNote"
+                app:srcCompat="@drawable/ic_draw" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

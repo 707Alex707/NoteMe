@@ -66,6 +66,11 @@ public class CreateNoteActivity extends AppCompatActivity {
         //addImageFromCameraButton
         ImageButton imageCameraButton = findViewById(R.id.addImageFromCameraButton);
         imageCameraButton.setOnClickListener(v -> addImageFromCamera());
+
+        ImageButton canvasButton = findViewById(R.id.canvasButton);
+        canvasButton.setOnClickListener(v -> GoToCanvas());
+
+
         noteImg.setVisibility(View.GONE);
 
         if (extras != null){
@@ -140,6 +145,13 @@ public class CreateNoteActivity extends AppCompatActivity {
             startActivityForResult(intent, SELECT_CAMERA_PICTURE_REQUEST_CODE);
 
         }
+    }
+
+    // Go to Canvas Activity
+    public void GoToCanvas(){
+        Intent launch = new Intent(getBaseContext(), CreateNoteActivity.class);
+
+        getBaseContext().startActivity(launch);
     }
 
     //Checks if pictures to access files was granted
