@@ -23,9 +23,11 @@ import androidx.core.content.ContextCompat;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class CreateNoteActivity extends AppCompatActivity {
+
 
     DatabaseHelper mDatabaseHelper;
     String noteColor = "#F4CA5E";
@@ -37,6 +39,7 @@ public class CreateNoteActivity extends AppCompatActivity {
 
     private static final int SELECT_PICTURE = 252;
     private static final int SELECT_CAMERA_PICTURE_REQUEST_CODE = 253;
+    private static final int DRAWING_REQUEST_CODE = 254;
     private byte[] selectedImageBytes = new byte[0];
 
 
@@ -150,7 +153,7 @@ public class CreateNoteActivity extends AppCompatActivity {
     // Go to Canvas Activity
     public void GoToCanvas(){
         Intent launch = new Intent(getBaseContext(), DrawActivity.class);
-        getBaseContext().startActivity(launch);
+        startActivityForResult(launch, DRAWING_REQUEST_CODE);
     }
 
     //Checks if pictures to access files was granted
@@ -213,6 +216,13 @@ public class CreateNoteActivity extends AppCompatActivity {
                 noteImg.setVisibility(View.VISIBLE);
                 Log.d("DEBUG", "Image with size of " + String.valueOf(selectedImageBytes.length) + " bytes saved");
 
+            } else if (requestCode == DRAWING_REQUEST_CODE){
+                selectedImageBytes = data.getByteArrayExtra("image");
+                Log.d("DEBUG", "Intent returned: " + Arrays.toString(selectedImageBytes));
+
+                // Display image
+                noteImg.setImageBitmap(getImage(selectedImageBytes));
+                noteImg.setVisibility(View.VISIBLE);
             }
         }
     }

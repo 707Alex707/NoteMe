@@ -46,10 +46,10 @@
             android:layout_height="wrap_content"
             android:id="@+id/itemTypeView"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/typeTV"
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toStartOf="@+id/doneButton"
             android:layout_marginEnd="16dp"/>
 
     <Spinner
@@ -84,6 +84,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/TextInputView"
             android:layout_marginStart="24dp"
+            android:layout_marginEnd="16dp"/>
+
+    <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_done"
+            android:id="@+id/doneButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

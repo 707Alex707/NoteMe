@@ -1,6 +1,8 @@
 package com.uoit.noteme;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.*;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -9,6 +11,8 @@ import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +29,7 @@ public class DrawActivity extends AppCompatActivity {
     Float lineStartx = null;
     Float lineStarty = null;;
     ArrayList<float[]> lines = new ArrayList<float[]>();
+    byte[] canvasBitmap = null;
 
     ArrayList<String[]> textToDraw = new ArrayList<String[]>();
 
@@ -75,6 +80,27 @@ public class DrawActivity extends AppCompatActivity {
             }
         });
 
+        //Set finish event listener
+        ImageView imageBack = findViewById(R.id.doneButton);
+        imageBack.setOnClickListener(v -> onDonePressed());
+
+    }
+
+    private void onDonePressed() {
+        Intent data = getIntent();
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        canvas.getDrawingCache().compress(Bitmap.CompressFormat.PNG, 100, stream);
+        canvasBitmap = stream.toByteArray();
+
+        if (canvasBitmap != null){
+           data.putExtra("image", canvasBitmap);
+        } else {
+            Log.d("DEBUG", "Bitmap is null");
+        }
+
+        setResult(Activity.RESULT_OK, data);
+        finish();
     }
 
     private class drawingCanvas extends View {
@@ -105,6 +131,8 @@ public class DrawActivity extends AppCompatActivity {
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
 
+            setDrawingCacheEnabled(true);
+
             for (int i = 0; i < lines.size(); i++) {
                 Log.d("Debug", "Drawing line " + String.valueOf(i));
                 linePaint.setStrokeWidth(lines.get(i)[4]);
@@ -122,6 +150,7 @@ public class DrawActivity extends AppCompatActivity {
             //Draw shapes
             canvas.drawPath(solidShapePath, solidShape);
             canvas.drawPath(hollowShapePath, hollowShape);
+
         }
 
         private void touchMove(float posx, float poxy){
