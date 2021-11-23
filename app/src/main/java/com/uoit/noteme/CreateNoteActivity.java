@@ -68,6 +68,9 @@ public class CreateNoteActivity extends AppCompatActivity {
         imageCameraButton.setOnClickListener(v -> addImageFromCamera());
         noteImg.setVisibility(View.GONE);
 
+        Intent intent = new Intent(this, DrawActivity.class);
+        startActivity(intent);
+
         if (extras != null){
             Bitmap bitmap = null;
             this.noteID = extras.getString("ID");
