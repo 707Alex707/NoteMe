@@ -55,6 +55,7 @@ public class DrawActivity extends AppCompatActivity {
         ArrayAdapter<String> adapterSize = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, itemSize);
         adapterSize.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         itemSizeSpinner.setAdapter(adapterSize);
+        itemSizeSpinner.setSelection(6);
 
         itemTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
